@@ -1,4 +1,4 @@
-use codemirror::{Doc, GutterId, Line, Options};
+use codemirror::{DocApi, Editor, EditorOptions, GutterId, Line};
 use wasm_bindgen::prelude::*;
 use web_sys::{window, Document, Element, HtmlTextAreaElement};
 
@@ -15,12 +15,12 @@ fn main() {
 
     document.body().unwrap().append_child(&text_area).unwrap();
 
-    let options = Options::default()
+    let options = EditorOptions::default()
         .line_numbers(true)
         .gutters(&[GUTTER_ERROR]);
 
     log::debug!("Create editor");
-    let editor = Doc::from_text_area(&text_area, &options);
+    let editor = Editor::from_text_area(&text_area, &options);
 
     editor.set_value("Hello from Rust\n\n\n");
 
@@ -31,6 +31,10 @@ fn main() {
     let marker = create_error_marker(&document);
     let line = Line::new(3);
     editor.set_gutter_marker(line, GUTTER_ERROR, &marker);
+    editor.on_change(|editor, change| {
+        log::debug!("Document changed: {change:?}");
+        log::debug!("New text is: {:?}", editor.value());
+    });
 }
 
 fn create_text_area(document: &Document) -> HtmlTextAreaElement {

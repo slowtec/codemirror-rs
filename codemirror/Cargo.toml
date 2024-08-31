@@ -8,6 +8,7 @@ license.workspace = true
 description.workspace = true
 repository.workspace = true
 homepage.workspace = true
+readme = "../README.md"
 
 [dependencies]
 derive_more = { version = "1.0.0", features = ["from"] }

@@ -1,3 +1,5 @@
+use std::rc::Rc;
+
 use codemirror_sys::from_text_area;
 use js_sys::{Object, Reflect};
 use wasm_bindgen::prelude::*;
@@ -20,7 +22,7 @@ fn main() {
 
     let options = Object::new();
     Reflect::set(&options, &"lineNumbers".into(), &true.into()).unwrap();
-    Reflect::set(&options, &"gutters".into(), &JsValue::from(gutters)).unwrap();
+    Reflect::set(&options, &"gutters".into(), &gutters).unwrap();
 
     log::debug!("Create editor");
     let editor = from_text_area(&text_area, &options);
@@ -29,11 +31,25 @@ fn main() {
 
     let marker = create_error_marker(&document);
     let line = JsValue::from(0);
-    editor.set_gutter_marker_with_element(&line, &GUTTER_ERROR, &marker);
+    editor.set_gutter_marker_with_element(&line, GUTTER_ERROR, &marker);
 
     let marker = create_error_marker(&document);
     let line = JsValue::from(3);
-    editor.set_gutter_marker_with_element(&line, &GUTTER_ERROR, &marker);
+    editor.set_gutter_marker_with_element(&line, GUTTER_ERROR, &marker);
+
+    let editor = Rc::new(editor);
+
+    let closure = Closure::wrap({
+        let editor = Rc::clone(&editor);
+        Box::new(move |_: JsValue| {
+            let value: String = editor.get_value().as_string().unwrap();
+            log::debug!("The content changed: {value}");
+        }) as Box<dyn FnMut(JsValue)>
+    });
+
+    editor.on("change", closure.as_ref().unchecked_ref());
+
+    closure.forget();
 }
 
 fn create_text_area(document: &Document) -> HtmlTextAreaElement {

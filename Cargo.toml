@@ -2,6 +2,7 @@
 members = [
   "codemirror",
   "codemirror/examples/basic",
+  "codemirror/examples/minimal",
   "codemirror-sys",
   "codemirror-sys/examples/basic"
 ]
