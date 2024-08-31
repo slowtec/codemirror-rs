@@ -1,0 +1,19 @@
+[workspace]
+members = [
+  "codemirror",
+  "codemirror/examples/basic",
+  "codemirror-sys",
+  "codemirror-sys/examples/basic"
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+description = "A wasm-bingen wrapper for CodeMirror"
+repository = "https://github.com/slowtec/codemirror-rs"
+homepage = "https://github.com/slowtec/codemirror-rs"
+authors = ["slowtec GmbH <post@slowtec.de>"]
+edition = "2021"
+rust-version = "1.80"
+license = "MIT/Apache-2.0"
+readme = "README.md"
