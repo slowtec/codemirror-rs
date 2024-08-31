@@ -9,7 +9,7 @@ members = [
 resolver = "2"
 
 [workspace.package]
-version = "0.1.0"
+version = "0.2.0"
 description = "A wasm-bingen wrapper for CodeMirror"
 repository = "https://github.com/slowtec/codemirror-rs"
 homepage = "https://github.com/slowtec/codemirror-rs"
